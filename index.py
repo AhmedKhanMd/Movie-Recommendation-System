@@ -1,7 +1,9 @@
+# This project was implemented as part of my coursera course 
+
 import requests_with_caching
 import json
 
-def get_movies_from_tastedive(movie):
+def get_movies_from_tastedive(movie): # return a dictionary consisting of 5 related movie titles for the corresponding movieTitle.
     
     di = {"type":"movies", "limit":5, "q":movie}
     
@@ -11,7 +13,7 @@ def get_movies_from_tastedive(movie):
     
     return data
     
-def extract_movie_titles(resultsFromTastedive):
+def extract_movie_titles(resultsFromTastedive): #extracting the movie title from the dictionary obtained by get_movies_from_tastedive
     
     movieTitles = []
     
@@ -20,7 +22,7 @@ def extract_movie_titles(resultsFromTastedive):
         
     return movieTitles
 
-def get_related_titles(movieTitles):
+def get_related_titles(movieTitles): # returns 5 related movie titles for every input in movieTitles list
     
     resultingList = []
     
@@ -32,13 +34,13 @@ def get_related_titles(movieTitles):
         
         for i in relatedMovies:
             
-            if i not in resultingList:
+            if i not in resultingList: # In order to avoid duplicat titles in resulting list
                 
                 resultingList.append(i)
                 
     return resultingList
 
-def get_movie_data(movieTitle):
+def get_movie_data(movieTitle): # getting additional information for the given movie through OMDB api
     
     di = {"t": movieTitle, "r": "json"}
     
@@ -46,7 +48,7 @@ def get_movie_data(movieTitle):
     
     return results.json()
 
-def get_movie_rating(movieInfo):
+def get_movie_rating(movieInfo): # returning rotten tomatoes rating for the corresponding movie title.
     
     for i in movieInfo['Ratings']:
         
@@ -66,10 +68,9 @@ def get_sorted_recommendations(movieTitles):
         
         moviesAndRating[i] = get_movie_rating(get_movie_data(i))
         
-        sortedList = [movie[0] for movie in sorted(moviesAndRating.items(),key = lambda x: (x[1], x[0]), reverse = True)]
     
-    print(sortedList)
+    # sorting recommendations according to the highest rating given by rotten tomatoes
+    
+    sortedList = [movie[0] for movie in sorted(moviesAndRating.items(),key = lambda x: (x[1], x[0]), reverse = True)] 
+    
     return sortedList
-    
-get_sorted_recommendations(["Bridesmaids", "Sherlock Holmes"])
-
