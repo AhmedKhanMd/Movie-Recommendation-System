@@ -1,4 +1,4 @@
-import requests
+import requests_with_caching
 import json
 
 def get_movies_from_tastedive(movie):
@@ -10,7 +10,7 @@ def get_movies_from_tastedive(movie):
     data = results.json()
     
     return data
-
+    
 def extract_movie_titles(resultsFromTastedive):
     
     movieTitles = []
@@ -52,10 +52,24 @@ def get_movie_rating(movieInfo):
         
         if i['Source'] == 'Rotten Tomatoes':
        
-            return int(i['Value'][:2])
+            return int(i['Value'][:-1])
 
     return 0
 
-# print(get_related_titles(["Black Panther", "Captain Marvel"]))
-# print(get_movie_data("Venom"))
+def get_sorted_recommendations(movieTitles):
     
+    relatedTitles = get_related_titles(movieTitles)
+    
+    moviesAndRating = {}
+    
+    for i in relatedTitles:
+        
+        moviesAndRating[i] = get_movie_rating(get_movie_data(i))
+        
+        sortedList = [movie[0] for movie in sorted(moviesAndRating.items(),key = lambda x: (x[1], x[0]), reverse = True)]
+    
+    print(sortedList)
+    return sortedList
+    
+get_sorted_recommendations(["Bridesmaids", "Sherlock Holmes"])
+
