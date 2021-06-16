@@ -11,7 +11,15 @@ def get_movies_from_tastedive(movie):
     
     return data
 
+def extract_movie_titles(resultsFromTastedive):
+    
+    movieTitles = []
+    
+    for i in resultsFromTastedive['Similar']['Results']:
+        movieTitles.append(i['Name'])
+        
+    return movieTitles
 
-print(get_movies_from_tastedive("Black Panther"))
+print(extract_movie_titles(get_movies_from_tastedive("Black Panther")))
     
 
