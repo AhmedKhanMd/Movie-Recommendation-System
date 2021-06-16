@@ -5,7 +5,7 @@ def get_movies_from_tastedive(movie):
     
     di = {"type":"movies", "limit":5, "q":movie}
     
-    results = requests.get('https://tastedive.com/api/similar', params = di)
+    results = requests_with_caching.get('https://tastedive.com/api/similar', params = di)
     
     data = results.json()
     
@@ -38,5 +38,15 @@ def get_related_titles(movieTitles):
                 
     return resultingList
 
-print(get_related_titles(["Black Panther", "Captain Marvel"]))
+def get_movie_data(movieTitle):
+    
+    di = {"t": movieTitle, "r": "json"}
+    
+    results = requests_with_caching.get("http://www.omdbapi.com/", params = di)
+    
+    return results.json()
+
+
+# print(get_related_titles(["Black Panther", "Captain Marvel"]))
+# print(get_movie_data("Venom"))
     
